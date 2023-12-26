@@ -70,7 +70,7 @@ async function getSearchData(siteUrl) {
         // await page.type('.app-header__container .app-search__input', siteUrl);
         // await page.type('.app-header__container .app-search__input', Keyboard.press('Enter'));
 
-        let isSite1Available = false
+        let isSite1Available = true
         try {
             await page.waitForSelector('.sc-wpruo1-1');
             // await page.click('button.lmzPKO');
