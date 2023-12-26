@@ -8,7 +8,7 @@ const site1 = `https://www.similarweb.com/`;
 const site2 = `https://website.grader.com/`;
 const noUrl = '#VALUE!';
 
-console.log("EXEC",process.env.PUPPETEER_EXECUTABLE_PATH)
+console.log("EXEC",process.env.PUPPETEER_EXECUTABLE_PATH, puppeteer.executablePath())
 async function getSearchData(siteUrl) {
     const browser = await puppeteer.launch({
         args:[
@@ -57,13 +57,13 @@ async function getSearchData(siteUrl) {
             // });
             
             const page = await browser.newPage();
-    
+            await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36');
             // Set screen size
             await page.setViewport({ width: 1080, height: 1024 });
     
             // Navigate the page to a URL
             // await page.goto(`https://www.similarweb.com/website/${siteUrl}/#overview`);
-            await page.goto(siteUrl,{timeout: 10000, waitUntil: 'domcontentloaded'})
+            await page.goto(siteUrl,{timeout: 60000, waitUntil: 'domcontentloaded'})
             
             // await page.goto(siteUrl)
             // await page.waitForSelector('.app-header__container .app-search__input');
@@ -72,8 +72,8 @@ async function getSearchData(siteUrl) {
             // await page.type('.app-header__container .app-search__input', Keyboard.press('Enter'));
     
             let isSite1Available = false
-            
-            await page.waitForSelector('.sc-wpruo1-1');
+            // console.log('Current page content:', await page.content());
+            await page.waitForSelector('div');
             // await page.click('button.lmzPKO');
             isSite1Available = true;
             console.log("site availabl tru")
@@ -250,6 +250,7 @@ async function getSearchData(siteUrl) {
         return output;
     }catch(err) {
         console.log("err1",err)
+        
     }finally{
         await browser.close();
     }
