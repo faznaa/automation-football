@@ -74,7 +74,7 @@ async function getSearchData(siteUrl) {
             let isSite1Available = false
             // console.log('Current page content:', await page.content());
             await page.waitForSelector('div');
-            // await page.click('button.lmzPKO');
+            await page.click('button.lmzPKO');
             isSite1Available = true;
             console.log("site availabl tru")
         
