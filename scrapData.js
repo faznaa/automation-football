@@ -34,14 +34,15 @@ async function getSearchData(siteUrl) {
         // const browser = await puppeteer.launch({
         //     headless:false
         // })
+        console.log(puppeteer.executablePath())
         const browser = await puppeteer.launch({
-            args:[
-                '--no-sandbox',
-                '--disable-setuid-sandbox',
-                "--single-process",
-                "--no-zygote"
-            ],
-            // headless: false,
+            // args:[
+            //     '--no-sandbox',
+            //     '--disable-setuid-sandbox',
+            //     "--single-process",
+            //     "--no-zygote"
+            // ],
+            headless: false,
             executablePath: process.env.NODE_ENV == 'production' ? process.env.PUPPETEER_EXECUTABLE_PATH : puppeteer.executablePath()
         });
         const page = await browser.newPage();
@@ -51,8 +52,9 @@ async function getSearchData(siteUrl) {
 
         // Navigate the page to a URL
         // await page.goto(`https://www.similarweb.com/website/${siteUrl}/#overview`);
-        await page.goto(siteUrl,{timeout: 60000, waitUntil: 'domcontentloaded'})
+        await page.goto(siteUrl,{timeout: 10000, waitUntil: 'domcontentloaded'})
         
+        // await page.goto(siteUrl)
         // await page.waitForSelector('.app-header__container .app-search__input');
 
         // await page.type('.app-header__container .app-search__input', siteUrl);
