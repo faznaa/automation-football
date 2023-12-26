@@ -3,6 +3,13 @@ import { scrapeData } from './scrapData.js'
 const app = express()
 
 app.use(express.json())
+app.use(
+    cors({
+      origin: [
+        'http://localhost:3000'
+      ]})
+)
+      
 const PORT = process.env.PORT || 4000
 
 app.listen(PORT, () => {
@@ -13,7 +20,7 @@ app.get('/', (req, res) => {
     res.send('Welcome to the server.')
 })
 
-app.post('/scrape', async(req, res) => {
+app.post('/ladder', async(req, res) => {
     try{
         const url =req.body.url
         const output = await scrapeData(url)
