@@ -35,6 +35,16 @@ async function getSearchData(siteUrl) {
         //     headless:false
         // })
         console.log(puppeteer.executablePath())
+        // const browser = await puppeteer.launch({
+        //     args:[
+        //         '--no-sandbox',
+        //         '--disable-setuid-sandbox',
+        //         "--single-process",
+        //         "--no-zygote"
+        //     ],
+        //     headless: false,
+        //     executablePath: process.env.NODE_ENV == 'production' ? process.env.PUPPETEER_EXECUTABLE_PATH : puppeteer.executablePath()
+        // });
         const browser = await puppeteer.launch({
             // args:[
             //     '--no-sandbox',
@@ -43,7 +53,7 @@ async function getSearchData(siteUrl) {
             //     "--no-zygote"
             // ],
             headless: false,
-            executablePath: process.env.NODE_ENV == 'production' ? process.env.PUPPETEER_EXECUTABLE_PATH : puppeteer.executablePath()
+            executablePath: process.env.NODE_ENV == 'production' ? '/usr/bin/google-chrome-stable' : puppeteer.executablePath()
         });
         const page = await browser.newPage();
 
@@ -66,7 +76,9 @@ async function getSearchData(siteUrl) {
             // await page.click('button.lmzPKO');
             isSite1Available = true;
             console.log("site availabl tru")
-        } catch (err) { }
+        } catch (err) { 
+            console.log("ERR1",err)
+        }
         console.log("isSite",isSite1Available)
         if (isSite1Available) {
             console.log("in if")
