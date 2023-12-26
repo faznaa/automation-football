@@ -1,0 +1,27 @@
+import express from 'express'
+import { scrapeData } from './scrapData.js'
+const app = express()
+
+app.use(express.json())
+const PORT = process.env.PORT || 4000
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}.`)
+})
+
+app.get('/', (req, res) => {
+    res.send('Welcome to the server.')
+})
+
+app.post('/scrape', async(req, res) => {
+    try{
+        const inputData = req.body.urls
+        const output = await scrapeData(inputData)
+        res.send({ status:'success',message:"Data scraped successfully",data:output})
+    }catch(e){
+        console.log(e)
+        res.status(500).send({ status:'failure',message:"Something went wrong"})
+    }
+})
+
+
