@@ -11,13 +11,12 @@ const noUrl = '#VALUE!';
 console.log("EXEC",process.env.PUPPETEER_EXECUTABLE_PATH)
 async function getSearchData(siteUrl) {
     const browser = await puppeteer.launch({
-        // args:[
-        //     '--no-sandbox',
-        //     '--disable-setuid-sandbox',
-        //     "--single-process",
-        //     "--no-zygote"
-        // ],
-        headless: false,
+        args:[
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            "--single-process",
+            "--no-zygote"
+        ],
         executablePath: process.env.NODE_ENV == 'production' ? '/usr/bin/google-chrome-stable' : puppeteer.executablePath()
     });
     try{
@@ -45,7 +44,6 @@ async function getSearchData(siteUrl) {
             // const browser = await puppeteer.launch({
             //     headless:false
             // })
-            console.log(puppeteer.executablePath())
             // const browser = await puppeteer.launch({
             //     args:[
             //         '--no-sandbox',
@@ -72,7 +70,7 @@ async function getSearchData(siteUrl) {
             // await page.type('.app-header__container .app-search__input', siteUrl);
             // await page.type('.app-header__container .app-search__input', Keyboard.press('Enter'));
     
-            let isSite1Available = true
+            let isSite1Available = false
             try {
                 await page.waitForSelector('.sc-wpruo1-1');
                 // await page.click('button.lmzPKO');
