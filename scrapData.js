@@ -8,7 +8,7 @@ const site1 = `https://www.similarweb.com/`;
 const site2 = `https://website.grader.com/`;
 const noUrl = '#VALUE!';
 
-console.lost("EXEC",process.env.PUPPETEER_EXECUTABLE_PATH)
+console.log("EXEC",process.env.PUPPETEER_EXECUTABLE_PATH)
 async function getSearchData(siteUrl) {
     let output = await (async () => {
         let outputRow = {
