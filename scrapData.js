@@ -29,7 +29,8 @@ async function getSearchData(siteUrl) {
             heading:[]
         }
         // Launch the browser and open a new blank page
-        const browser = await puppeteer.launch({ headless: false, executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe' });
+        // const browser = await puppeteer.launch({ headless: false, executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe' });
+        const browser = await puppeteer.launch({ headless: false });
         const page = await browser.newPage();
 
         // Set screen size
