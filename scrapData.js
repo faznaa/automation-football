@@ -17,6 +17,7 @@ async function getSearchData(siteUrl) {
             "--single-process",
             "--no-zygote"
         ],
+        headless: true,
         executablePath: process.env.NODE_ENV == 'production' ? '/usr/bin/google-chrome-stable' : puppeteer.executablePath()
     });
     try{
@@ -71,14 +72,12 @@ async function getSearchData(siteUrl) {
             // await page.type('.app-header__container .app-search__input', Keyboard.press('Enter'));
     
             let isSite1Available = false
-            try {
-                await page.waitForSelector('.sc-wpruo1-1');
-                // await page.click('button.lmzPKO');
-                isSite1Available = true;
-                console.log("site availabl tru")
-            } catch (err) { 
-                throw new Error("Site not available",err)
-            }
+            
+            await page.waitForSelector('.sc-wpruo1-1');
+            // await page.click('button.lmzPKO');
+            isSite1Available = true;
+            console.log("site availabl tru")
+        
             console.log("isSite",isSite1Available)
             if (isSite1Available) {
                 console.log("in if")
@@ -246,6 +245,7 @@ async function getSearchData(siteUrl) {
             // console.log(outputRow.heading)
             return outputRow
         })();
+    
     
         return output;
     }catch(err) {
