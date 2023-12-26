@@ -10,6 +10,16 @@ const noUrl = '#VALUE!';
 
 console.log("EXEC",process.env.PUPPETEER_EXECUTABLE_PATH)
 async function getSearchData(siteUrl) {
+    const browser = await puppeteer.launch({
+        // args:[
+        //     '--no-sandbox',
+        //     '--disable-setuid-sandbox',
+        //     "--single-process",
+        //     "--no-zygote"
+        // ],
+        headless: false,
+        executablePath: process.env.NODE_ENV == 'production' ? '/usr/bin/google-chrome-stable' : puppeteer.executablePath()
+    });
     try{
         let output = await (async () => {
             let outputRow = {
@@ -46,16 +56,7 @@ async function getSearchData(siteUrl) {
             //     headless: false,
             //     executablePath: process.env.NODE_ENV == 'production' ? process.env.PUPPETEER_EXECUTABLE_PATH : puppeteer.executablePath()
             // });
-            const browser = await puppeteer.launch({
-                // args:[
-                //     '--no-sandbox',
-                //     '--disable-setuid-sandbox',
-                //     "--single-process",
-                //     "--no-zygote"
-                // ],
-                headless: false,
-                executablePath: process.env.NODE_ENV == 'production' ? '/usr/bin/google-chrome-stable' : puppeteer.executablePath()
-            });
+            
             const page = await browser.newPage();
     
             // Set screen size
@@ -251,6 +252,8 @@ async function getSearchData(siteUrl) {
         return output;
     }catch(err) {
         console.log("err1",err)
+    }finally{
+        await browser.close();
     }
 }
 
