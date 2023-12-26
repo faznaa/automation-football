@@ -31,6 +31,9 @@ async function getSearchData(siteUrl) {
         }
         // Launch the browser and open a new blank page
         // const browser = await puppeteer.launch({ headless: false, executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe' });
+        // const browser = await puppeteer.launch({
+        //     headless:false
+        // })
         const browser = await puppeteer.launch({
             args:[
                 '--no-sandbox',
@@ -38,6 +41,7 @@ async function getSearchData(siteUrl) {
                 "--single-process",
                 "--no-zygote"
             ],
+            headless: false,
             executablePath: process.env.NODE_ENV == 'production' ? process.env.PUPPETEER_EXECUTABLE_PATH : puppeteer.executablePath()
         });
         const page = await browser.newPage();
@@ -48,9 +52,7 @@ async function getSearchData(siteUrl) {
         // Navigate the page to a URL
         // await page.goto(`https://www.similarweb.com/website/${siteUrl}/#overview`);
         await page.goto(siteUrl,{timeout: 60000, waitUntil: 'domcontentloaded'})
-        setTimeout(() => {
-            console.log('after timeout')
-        },2000)
+        
         // await page.waitForSelector('.app-header__container .app-search__input');
 
         // await page.type('.app-header__container .app-search__input', siteUrl);
@@ -58,8 +60,8 @@ async function getSearchData(siteUrl) {
 
         let isSite1Available = false
         try {
-            await page.waitForSelector('div');
-            await page.click('button.lmzPKO');
+            await page.waitForSelector('.sc-wpruo1-1');
+            // await page.click('button.lmzPKO');
             isSite1Available = true;
             console.log("site availabl tru")
         } catch (err) { }
