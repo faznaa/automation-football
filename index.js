@@ -15,8 +15,8 @@ app.get('/', (req, res) => {
 
 app.post('/scrape', async(req, res) => {
     try{
-        const inputData = req.body.urls
-        const output = await scrapeData(inputData)
+        const url =req.body.url
+        const output = await scrapeData(url)
         res.send({ status:'success',message:"Data scraped successfully",data:output})
     }catch(e){
         console.log(e)

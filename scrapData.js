@@ -284,9 +284,11 @@ async function parseCsv() {
     return promise;
 }
 
-async function processData(inputData) {
+async function processData(url) {
     // await parseCsv();
-
+    let inputData = [{
+        'websiteUrl':url
+    }]
     let outputData = [];
     for (let row of inputData) {
         if (row.websiteUrl == noUrl) {
@@ -326,8 +328,8 @@ async function filterData(data) {
     console.log(output)
     return output
 }
-async function scrapeData(inputData) {
-    let data = await processData(inputData);
+async function scrapeData(url) {
+    let data = await processData(url);
     const filteredData = await filterData(data)
     console.log(filteredData)
     return filteredData
