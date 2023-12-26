@@ -2,7 +2,8 @@ import fs from "fs";
 import { parse } from "csv-parse";
 import puppeteer from 'puppeteer';
 import { generateCsv } from './generateCsv.js';
-
+import { configDotenv } from "dotenv";
+configDotenv();
 const site1 = `https://www.similarweb.com/`;
 const site2 = `https://website.grader.com/`;
 const noUrl = '#VALUE!';
@@ -30,7 +31,15 @@ async function getSearchData(siteUrl) {
         }
         // Launch the browser and open a new blank page
         // const browser = await puppeteer.launch({ headless: false, executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe' });
-        const browser = await puppeteer.launch({ headless: true});
+        const browser = await puppeteer.launch({
+            args:[
+                '--no-sandbox',
+                '--disable-setuid-sandbox',
+                "--single-process",
+                "--no-zygote"
+            ],
+            executablePath: process.env.NODE_ENV == 'production' ? process.env.PUPPETEER_EXECUTABLE_PATH : puppeteer.executablePath()
+        });
         const page = await browser.newPage();
 
         // Set screen size
