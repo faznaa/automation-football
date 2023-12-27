@@ -72,19 +72,21 @@ async function getSearchData(siteUrl) {
                     for (let i=1; i<divs.length;i++) {
                         elem = divs[i]
                         let playersList = {
+                            rank:1,
                             player:'',
                             team:'',
                             gp:'',
                             g:'',
-                            bp:''
+                            bp:'',
                         }
                         let players = Array.from(elem.querySelectorAll('.lkXaJb'))
                         // playersList.player = elem.innerText
-                        playersList.player = players[0].innerText
-                        playersList.team = players[1].innerText
-                        playersList.gp = players[2].innerText
-                        playersList.g = players[3].innerText
-                        playersList.bp = players[4].innerText
+                        playersList.rank = players[0].innerText
+                        playersList.player = players[1].innerText
+                        playersList.team = players[2].innerText
+                        playersList.gp = players[3].innerText
+                        playersList.g = players[4].innerText
+                        playersList.bp = players[5].innerText
                         // let location = elem.querySelector('.jegPPm')
                         // myTeam.venue = location.innerText;
                         // myTeam.firstVenue = location.innerText.split('/')?.[0]
