@@ -10,16 +10,16 @@ const noUrl = '#VALUE!';
 async function getSearchData(siteUrl) {
     console.log("FIXTURE")
     const browser = await puppeteer.launch({
-        // args:[
-        //     '--no-sandbox',
-        //     '--disable-setuid-sandbox',
-        //     "--single-process",
-        //     "--no-zygote"
-        // ],
+        args:[
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            "--single-process",
+            "--no-zygote"
+        ],
         // headless: true,
         // REMOVE THIS BEFORE PRODUCTION
         headless:process.env.NODE_ENV == 'production' ? true : false,
-        // executablePath: process.env.NODE_ENV == 'production' ? '/usr/bin/google-chrome-stable' : puppeteer.executablePath()
+        executablePath: process.env.NODE_ENV == 'production' ? '/usr/bin/google-chrome-stable' : puppeteer.executablePath()
     });
     try{
         let output = await (async () => {
@@ -32,7 +32,7 @@ async function getSearchData(siteUrl) {
             
             const page = await browser.newPage();
             // REMOVE THIS BEFORE PRODUCTION
-            // await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36');
+            await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36');
             
             // Set screen size
             await page.setViewport({ width: 1080, height: 1024 });
@@ -49,7 +49,7 @@ async function getSearchData(siteUrl) {
     
             let isSite1Available = false
             // console.log('Current page content:', await page.content());
-            await page.waitForSelector('.sc-10c3c88-4');
+            await page.waitForSelector('.sc-1y2ivwy-5');
             // await page.click('button.lmzPKO');
             isSite1Available = true;
         
@@ -61,32 +61,37 @@ async function getSearchData(siteUrl) {
                     let date = ""
                     let round = ""
                     // let li = document.querySelectorAll(".sc-10c3c88-4")
-                    let divs =document.querySelectorAll('.gGhIGz')
-                    let myDate = document.querySelector('.emDkPM')
-                    let myRound = document.querySelector('.fLyUTG')
+                    let divs =document.querySelectorAll('.habRqr')
+                    // let myDate = document.querySelector('.emDkPM')
+                    // let myRound = document.querySelector('.fLyUTG')
 
-                    round = myRound.innerText
-                    date = myDate.innerText
+                    // round = myRound.innerText
+                    // date = myDate.innerText
                     // head.push(divs.length)
-                    for (let i=0; i<divs.length;i++) {
+                    for (let i=1; i<divs.length;i++) {
                         elem = divs[i]
-                        let myTeam = {
-                            teams:[],
-                            venue:''
-
+                        let playersList = {
+                            player:'',
+                            team:'',
+                            gp:'',
+                            g:'',
+                            bp:''
                         }
-                        let teams = Array.from(elem.querySelectorAll(".sc-12j2xsj-3"))
-                        for (let element of teams) {
-                                        myTeam.teams.push(element.textContent);
-                                    }
-                        let location = elem.querySelector('.jegPPm')
-                        myTeam.venue = location.innerText;
-                        myTeam.firstVenue = location.innerText.split('/')?.[0]
+                        let players = Array.from(elem.querySelectorAll('.lkXaJb'))
+                        // playersList.player = elem.innerText
+                        playersList.player = players[0].innerText
+                        playersList.team = players[1].innerText
+                        playersList.gp = players[2].innerText
+                        playersList.g = players[3].innerText
+                        playersList.bp = players[4].innerText
+                        // let location = elem.querySelector('.jegPPm')
+                        // myTeam.venue = location.innerText;
+                        // myTeam.firstVenue = location.innerText.split('/')?.[0]
 
-                        let time = elem.querySelector('.dTddCR')
-                        myTeam.datetime = time.innerText
-                        myTeam.time = time.innerText?.split(',')?.[0]
-                        head.push(myTeam)
+                        // let time = elem.querySelector('.dTddCR')
+                        // myTeam.datetime = time.innerText
+                        // myTeam.time = time.innerText?.split(',')?.[0]
+                        head.push(playersList)
                     }
                     // let first_ul = ul[0]
                     // for (let elem in games) {
@@ -311,11 +316,11 @@ async function filterData(data) {
     console.log(output)
     return output
 }
-async function scrapeFixtureData(url) {
+async function scrapeStatisticsData(url) {
     let filteredData = await processData(url);
     // const filteredData = await filterData(data)
     console.log(filteredData)
     return filteredData[0]
 }
 
-export { scrapeFixtureData }
+export { scrapeStatisticsData }
