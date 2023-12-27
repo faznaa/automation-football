@@ -31,7 +31,7 @@ async function getSearchData(siteUrl) {
             
             const page = await browser.newPage();
             // REMOVE THIS BEFORE PRODUCTION
-            // await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36');
+            await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36');
             
             // Set screen size
             await page.setViewport({ width: 1080, height: 1024 });
