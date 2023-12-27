@@ -16,8 +16,8 @@ async function getSearchData(siteUrl) {
             "--single-process",
             "--no-zygote"
         ],
-        // headless: true,
-        headless:process.env.NODE_ENV == 'production' ? true : false,
+        headless: true,
+        // headless:process.env.NODE_ENV == 'production' ? true : false,
                 // REMOVE THIS BEFORE PRODUCTION
         executablePath: process.env.NODE_ENV == 'production' ? '/usr/bin/google-chrome-stable' : puppeteer.executablePath()
     });
