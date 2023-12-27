@@ -8,24 +8,25 @@ configDotenv();
 const noUrl = '#VALUE!';
 
 async function getSearchData(siteUrl) {
+    console.log("FIXTURE")
     const browser = await puppeteer.launch({
-        args:[
-            '--no-sandbox',
-            '--disable-setuid-sandbox',
-            "--single-process",
-            "--no-zygote"
-        ],
+        // args:[
+        //     '--no-sandbox',
+        //     '--disable-setuid-sandbox',
+        //     "--single-process",
+        //     "--no-zygote"
+        // ],
         // headless: true,
         // REMOVE THIS BEFORE PRODUCTION
         headless:process.env.NODE_ENV == 'production' ? true : false,
-        executablePath: process.env.NODE_ENV == 'production' ? '/usr/bin/google-chrome-stable' : puppeteer.executablePath()
+        // executablePath: process.env.NODE_ENV == 'production' ? '/usr/bin/google-chrome-stable' : puppeteer.executablePath()
     });
     try{
         let output = await (async () => {
             let outputRow = {
-                tr:[],
                 data:[],
-                heading:[]
+                date:'',
+                round:''
             }
             
             
@@ -48,67 +49,106 @@ async function getSearchData(siteUrl) {
     
             let isSite1Available = false
             // console.log('Current page content:', await page.content());
-            await page.waitForSelector('div');
-            await page.click('button.lmzPKO');
+            await page.waitForSelector('.sc-10c3c88-4');
+            // await page.click('button.lmzPKO');
             isSite1Available = true;
-            console.log("site availabl tru")
         
             console.log("isSite",isSite1Available)
             if (isSite1Available) {
                 console.log("in if")
                 let set1 = await page.evaluate(() => {
-                    let table = document.querySelectorAll("table")
-                    let table_heading = table[0].querySelectorAll("th")
-                    let table_body = table[0].querySelectorAll("td")
-                    let head = [];
+                    let head =[]
+                    let date = ""
+                    let round = ""
+                    // let li = document.querySelectorAll(".sc-10c3c88-4")
+                    let divs =document.querySelectorAll('.gGhIGz')
+                    let myDate = document.querySelector('.emDkPM')
+                    let myRound = document.querySelector('.fLyUTG')
+
+                    round = myRound.innerText
+                    date = myDate.innerText
+                    // head.push(divs.length)
+                    for (let i=0; i<divs.length;i++) {
+                        elem = divs[i]
+                        let myTeam = {
+                            teams:[],
+                            venue:''
+
+                        }
+                        let teams = Array.from(elem.querySelectorAll(".sc-12j2xsj-3"))
+                        for (let element of teams) {
+                                        myTeam.teams.push(element.textContent);
+                                    }
+                        let location = elem.querySelector('.jegPPm')
+                        myTeam.venue = location.innerText;
+                        myTeam.firstVenue = location.innerText.split('/')?.[0]
+
+                        let time = elem.querySelector('.dTddCR')
+                        myTeam.datetime = time.innerText
+                        myTeam.time = time.innerText?.split(',')?.[0]
+                        head.push(myTeam)
+                    }
+                    // let first_ul = ul[0]
+                    // for (let elem in games) {
+                    //     let game = Array.from(elem.querySelectorAll(".sc-12j2xsj-3"))
+                    //     for (let element of game) {
+                    //             head.push(element.textContent);
+                    //         } 
+                    // }
+                    // head.push(divs[0].innerText)
+                    // let table_heading = table[0].querySelectorAll("th")
+                    // let table_body = table[0].querySelectorAll("td")
+                    // let head = [];
                     
-                    for (let element of table_heading) {
-                        head.push(element.textContent);
-                    }
-                    let table_heading_2 = table[1].querySelectorAll("th")
-                    let table_body_2 = table[1].querySelectorAll("tr")
-                    for (let element of table_heading_2) {
-                            head.push(element.textContent);
+                    // for (let element of table_heading) {
+                    //     head.push(element.textContent);
+                    // }
+                    // let table_heading_2 = table[1].querySelectorAll("th")
+                    // let table_body_2 = table[1].querySelectorAll("tr")
+                    // for (let element of table_heading_2) {
+                    //         head.push(element.textContent);
                         
-                    }
-                    let fullData = {}
-                    head.map((item,index)=>{
-                        fullData[item] = []
-                    })
-                    let texts = [];
-                    x=0
-                    for (let element of table_body) {
-                        if(x%2==0){
-                            fullData[head[0]].push(element.textContent)
-                        }
-                        else{
-                            fullData[head[1]].push(element.textContent)
-                        }
-                        x++
-                    }
-                    for (let element of table_body_2) {
-                        a=2
-                        let table_body_2_td = element.querySelectorAll("td")
-                        if(table_body_2_td.length==0){
-                            continue
-                        }
-                        for (let element_td of table_body_2_td) {
-                                fullData[head[a]].push(element_td.textContent)
-                                a++
-                        }
-                    }
+                    // }
+                    // let fullData = {}
+                    // head.map((item,index)=>{
+                    //     fullData[item] = []
+                    // })
+                    // let texts = [];
+                    // x=0
+                    // for (let element of table_body) {
+                    //     if(x%2==0){
+                    //         fullData[head[0]].push(element.textContent)
+                    //     }
+                    //     else{
+                    //         fullData[head[1]].push(element.textContent)
+                    //     }
+                    //     x++
+                    // }
+                    // for (let element of table_body_2) {
+                    //     a=2
+                    //     let table_body_2_td = element.querySelectorAll("td")
+                    //     if(table_body_2_td.length==0){
+                    //         continue
+                    //     }
+                    //     for (let element_td of table_body_2_td) {
+                    //             fullData[head[a]].push(element_td.textContent)
+                    //             a++
+                    //     }
+                    // }
     
                     // let texts = [];
                     // for (let element of elements) {
                     //     texts.push(element.textContent);
                     // }
-                    return { head, texts, fullData};
+                    return { head, date, round };
                    }
                 );
                 console.log("set1",set1)
-                outputRow.heading = set1.head;
-                outputRow.data = set1.texts;
-                outputRow.tr = set1.fullData;
+                outputRow.data = set1.head;
+                outputRow.date = set1.date;
+                outputRow.round = set1.round;
+                // outputRow.data = set1.texts;
+                // outputRow.tr = set1.fullData;
             }
                 // let sety = await page.evaluate(() => {
                 //     let elements = document.querySelector('.app-parameter-change')
@@ -271,11 +311,11 @@ async function filterData(data) {
     console.log(output)
     return output
 }
-async function scrapeData(url) {
-    let data = await processData(url);
-    const filteredData = await filterData(data)
+async function scrapeFixtureData(url) {
+    let filteredData = await processData(url);
+    // const filteredData = await filterData(data)
     console.log(filteredData)
-    return filteredData
+    return filteredData[0]
 }
 
-export { scrapeData }
+export { scrapeFixtureData }
