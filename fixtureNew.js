@@ -25,8 +25,12 @@ async function getSearchData(siteUrl) {
     try{
         let output = await (async () => {
             let outputRow = {
-                data:[],
+                title:'',
+                scores:[],
+                bestPlayers:[],
+                goalkickers:[],
                 date:'',
+                location:'',
                 round:'',
                 link:''
             }
@@ -51,7 +55,7 @@ async function getSearchData(siteUrl) {
     
             let isSite1Available = false
             // console.log('Current page content:', await page.content());
-            await page.waitForSelector('.sc-10c3c88-4');
+            await page.waitForSelector('.sc-1swl5w-21');
             // await page.click('a.gdEmqr');
             // const link = await page.$('a.gdEmqr');
             // return link;
@@ -63,13 +67,74 @@ async function getSearchData(siteUrl) {
                 let set1 = await page.evaluate(() => {
                     
                     let myLink = document.querySelector('a.gdEmqr')
+                    let scoreTable = Array.from(document.querySelectorAll('tr.bGvXXJ'))
+                    const scores = scoreTable.map((row) => {
+                        let teamName = row.querySelector('th').innerText
+                        let points = Array.from(row.querySelectorAll('.GkvRV')).map((value) =>  value.innerText).slice(1)
+                        let secondValues = Array.from(row.querySelectorAll('.kLxiIC')).map((value) =>  value.innerText)
+                        return {
+                            teamName,
+                            points,
+                            secondValues
+                        }
+
+                    })
+                    const nullPlayers = 'No best players have been selected'
+
+                    let playersInfo = Array.from(document.querySelectorAll('.sc-1swl5w-22'))
+                    let bestPlayersTeam1 = playersInfo[0].querySelector('.sc-c5jfdg-2').innerText?.split(',')
+                    let bestPlayersTeam2 = playersInfo[1].querySelector('.sc-c5jfdg-2').innerText?.split(',')
+                    let bestPlayersTeam1Arr = bestPlayersTeam1[0] == nullPlayers ? [] : bestPlayersTeam1
+                    let bestPlayersTeam2Arr = bestPlayersTeam2[0] == nullPlayers ? [] : bestPlayersTeam2
+                    let playerStatisticTeam1 = playersInfo[2]?.querySelectorAll('tr')
+                    let playerStatisticTeam2 = playersInfo[3]?.querySelectorAll('tr')
+                    let _playerStatisticTeam1 = Array.from(playerStatisticTeam1).map((row) => {
+                        let playerData =Array.from(row.querySelectorAll('td'))
+                        if(!playerData[0]?.innerText) return null
+                        return {
+                            index:playerData[0]?.innerText,
+                            player:playerData[1]?.innerText,
+                            goal:playerData[2]?.innerText,
+                        }
+                    })
+                    playerStatisticTeam1 = _playerStatisticTeam1.filter((value) => value?.goal != null)
+                    playerStatisticTeam1.sort((a,b) => a.index - b.index)
+                    const goalKeepersTeam1 = playerStatisticTeam1.filter((value) => value.goal != '0').map((value) => value.player)
+                    let _playerStatisticTeam2 = Array.from(playerStatisticTeam2).map((row) => {
+                        let playerData =Array.from(row.querySelectorAll('td'))
+                        if(!playerData[0]?.innerText) return null
+                        return {
+                            index:playerData[0]?.innerText,
+                            player:playerData[1]?.innerText,
+                            goal:playerData[2]?.innerText,
+                        }
+                    })
+                    playerStatisticTeam2 = _playerStatisticTeam2.filter((value) => value?.goal != null)
+                    playerStatisticTeam2.sort((a,b) => a.index - b.index)
+                    const goalKeepersTeam2 =playerStatisticTeam2.filter((value) => value?.goal != '0')?.map((value) => value.player)
+
                     
-                    return myLink.href;
+                    return {
+                        scores,
+                        playersLength:playersInfo.length,
+                        bestPlayers:{
+                            team_1:bestPlayersTeam1Arr ,
+                            team_2:bestPlayersTeam2Arr,
+                            all:bestPlayersTeam1Arr.concat(bestPlayersTeam2Arr)
+                        },
+                        goalKeepers:{
+                            team_1:goalKeepersTeam1,
+                            team_2:goalKeepersTeam2,
+                            all:goalKeepersTeam1.concat(goalKeepersTeam2)
+                        }
+
+                    }
+                    
                    }
                 );
                 console.log("set1",set1)
                
-                outputRow.link = set1;
+                outputRow = set1;
              
             }
 
@@ -129,11 +194,11 @@ async function filterData(data) {
     console.log(output)
     return output
 }
-async function scrapeFixtureData(url) {
+async function scrapeFixtureDataNew(url) {
     let filteredData = await processData(url);
     // const filteredData = await filterData(data)
     console.log(filteredData)
     return filteredData[0]
 }
 
-export { scrapeFixtureData }
+export { scrapeFixtureDataNew }

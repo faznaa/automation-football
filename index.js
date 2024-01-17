@@ -3,6 +3,7 @@ import { scrapeData } from './scrapData.js'
 import { scrapeFixtureData } from './fixture.js'
 import { scrapeStatisticsData } from './statistics.js'
 import cors from 'cors'
+import { scrapeFixtureDataNew } from './fixtureNew.js'
 const app = express()
 
 app.use(express.json())
@@ -38,7 +39,9 @@ app.post('/fixture', async(req, res) => {
   try{
       const url =req.body.url
       const output = await scrapeFixtureData(url)
-      res.send({ status:'success',message:"Data scraped successfully",data:output})
+      const link = output.link;
+      const output1 = await scrapeFixtureDataNew(link)
+      res.send({ status:'success',message:"Data scraped successfully",data:output1})
   }catch(e){
       console.log(e)
       res.status(500).send({ status:'failure',message:"Something went wrong"})
