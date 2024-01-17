@@ -99,7 +99,7 @@ async function getSearchData(siteUrl) {
                     })
                     playerStatisticTeam1 = _playerStatisticTeam1.filter((value) => value?.goal != null)
                     playerStatisticTeam1.sort((a,b) => a.index - b.index)
-                    const goalKeepersTeam1 = playerStatisticTeam1.filter((value) => value.goal != '0').map((value) => value.player)
+                    const goalKeepersTeam1 = playerStatisticTeam1.filter((value) => value.goal != '0')
                     let _playerStatisticTeam2 = Array.from(playerStatisticTeam2).map((row) => {
                         let playerData =Array.from(row.querySelectorAll('td'))
                         if(!playerData[0]?.innerText) return null
@@ -111,7 +111,7 @@ async function getSearchData(siteUrl) {
                     })
                     playerStatisticTeam2 = _playerStatisticTeam2.filter((value) => value?.goal != null)
                     playerStatisticTeam2.sort((a,b) => a.index - b.index)
-                    const goalKeepersTeam2 =playerStatisticTeam2.filter((value) => value?.goal != '0')?.map((value) => value.player)
+                    const goalKeepersTeam2 =playerStatisticTeam2.filter((value) => value?.goal != '0')
 
                     
                     return {
