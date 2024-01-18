@@ -4,8 +4,11 @@ import { scrapeFixtureData } from './fixture.js'
 import { scrapeStatisticsData } from './statistics.js'
 import cors from 'cors'
 import { scrapeFixtureDataNew } from './fixtureNew.js'
+import { generateBlogFinal } from './blog.js'
+import dotenv from 'dotenv'
 const app = express()
 
+dotenv.config()
 app.use(express.json())
 app.use(
     cors({
@@ -41,6 +44,9 @@ app.post('/fixture', async(req, res) => {
       const output = await scrapeFixtureData(url)
       const link = output.link;
       const output1 = await scrapeFixtureDataNew(link)
+      const data = await generateBlogFinal(output1)
+
+      // const blog = generat
       res.send({ status:'success',message:"Data scraped successfully",data:output1})
   }catch(e){
       console.log(e)
@@ -48,7 +54,17 @@ app.post('/fixture', async(req, res) => {
   }
 })
 
-// app.post('/')
+
+
+app.post('/blog',async(req, res) => {
+    try{
+      const data = await generateBlogFinal()
+      res.send({ status:'success',message:"Data scraped successfully",data:data})
+    } catch(e){
+        console.log(e)
+        res.status(500).send({ status:'failure',message:"Something went wrong"})
+    }
+})
 
 app.post('/statistics', async(req, res) => {
   try{
