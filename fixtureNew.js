@@ -81,6 +81,15 @@ async function getSearchData(siteUrl) {
                     })
                     const nullPlayers = 'No best players have been selected'
 
+                    let playData =document.querySelectorAll('.sc-1swl5w-17')[0]
+                    playData = Array.from(playData.querySelectorAll('span.sc-jEACwC'))
+                    // let date = 'h'
+                    // let place = 'h'
+                    // let round = 'h'
+                    let date = playData[0].innerText
+                    let place = playData[1].innerText
+                    let round = playData[2].innerText
+
                     let playersInfo = Array.from(document.querySelectorAll('.sc-1swl5w-22'))
                     let bestPlayersTeam1 = playersInfo[0].querySelector('.sc-c5jfdg-2').innerText?.split(',')
                     let bestPlayersTeam2 = playersInfo[1].querySelector('.sc-c5jfdg-2').innerText?.split(',')
@@ -112,10 +121,15 @@ async function getSearchData(siteUrl) {
                     playerStatisticTeam2 = _playerStatisticTeam2.filter((value) => value?.goal != null)
                     playerStatisticTeam2.sort((a,b) => a.index - b.index)
                     const goalKeepersTeam2 =playerStatisticTeam2.filter((value) => value?.goal != '0')
-
-                    
+                    goalKeepersTeam1.sort((a,b) => b.goal - a.goal)
+                    goalKeepersTeam2.sort((a,b) => b.goal - a.goal)
                     return {
+                        date,
+                        place,
+                        round,
+                        playData:playData[0].innerText,
                         scores,
+        
                         playersLength:playersInfo.length,
                         bestPlayers:{
                             team_1:bestPlayersTeam1Arr ,
@@ -125,7 +139,10 @@ async function getSearchData(siteUrl) {
                         goalKeepers:{
                             team_1:goalKeepersTeam1,
                             team_2:goalKeepersTeam2,
-                            all:goalKeepersTeam1.concat(goalKeepersTeam2)
+                            all:goalKeepersTeam1.concat(goalKeepersTeam2),
+                            text:{
+                                team_1:goalKeepersTeam1
+                            }
                         }
 
                     }
