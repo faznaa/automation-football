@@ -44,10 +44,10 @@ app.post('/fixture', async(req, res) => {
       const output = await scrapeFixtureData(url)
       const link = output.link;
       const output1 = await scrapeFixtureDataNew(link)
-      const data = await generateBlogFinal(output1)
+      const blog = await generateBlogFinal(output1)
 
       // const blog = generat
-      res.send({ status:'success',message:"Data scraped successfully",data:output1})
+      res.send({ status:'success',message:"Data scraped successfully",data:output1,blog})
   }catch(e){
       console.log(e)
       res.status(500).send({ status:'failure',message:"Something went wrong"})

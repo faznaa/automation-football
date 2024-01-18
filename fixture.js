@@ -16,7 +16,7 @@ async function getSearchData(siteUrl) {
             "--single-process",
             "--no-zygote"
         ],
-        headless: true,
+        // headless: true,
         // headless:false,
         // headless:process.env.NODE_ENV == 'production' ? true : false,
                 // REMOVE THIS BEFORE PRODUCTION
