@@ -44,10 +44,9 @@ app.post('/fixture', async(req, res) => {
       const output = await scrapeFixtureData(url)
       const link = output.link;
       const output1 = await scrapeFixtureDataNew(link)
-      const blog = await generateBlogFinal(output1)
 
       // const blog = generat
-      res.send({ status:'success',message:"Data scraped successfully",data:output1,blog})
+      res.send({ status:'success',message:"Data scraped successfully",data:output1})
   }catch(e){
       console.log(e)
       res.status(500).send({ status:'failure',message:"Something went wrong"})
@@ -58,8 +57,14 @@ app.post('/fixture', async(req, res) => {
 
 app.post('/blog',async(req, res) => {
     try{
-      const data = await generateBlogFinal()
-      res.send({ status:'success',message:"Data scraped successfully",data:data})
+      const url =req.body.url
+      const output = await scrapeFixtureData(url)
+      const link = output.link;
+      const output1 = await scrapeFixtureDataNew(link)
+      const blog = await generateBlogFinal(output1)
+
+      // const blog = generat
+      res.send({ status:'success',message:"Blog generated successfully",blog})
     } catch(e){
         console.log(e)
         res.status(500).send({ status:'failure',message:"Something went wrong"})
