@@ -183,7 +183,12 @@ const generateBlog = async(data) => {
   const finalPrompt = prompt(teamsData);
 
   const result = await openAiFun(finalPrompt);
-  return result;
+  return {
+    blog: result,
+    date: data.date,
+    place: data.place,
+    team:data.scores[0].teamName + " vs " + data.scores[1].teamName,
+  };
 
 };
 

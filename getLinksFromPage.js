@@ -62,9 +62,11 @@ async function getSearchData(siteUrl) {
                 console.log("in if")
                 let set1 = await page.evaluate(() => {
                     
-                    let myLink = document.querySelector('a.gdEmqr')
+                    let myLink = Array.from(document.querySelectorAll('a.gdEmqr'));
+                    return myLink.map(
+                       function(a){ return a.href; }
+                    );
                     
-                    return myLink.href;
                    }
                 );
                 console.log("set1",set1)
@@ -129,11 +131,11 @@ async function filterData(data) {
     console.log(output)
     return output
 }
-async function scrapeFixtureData(url) {
+async function getLinks(url) {
     let filteredData = await processData(url);
     // const filteredData = await filterData(data)
     console.log(filteredData)
     return filteredData[0]
 }
 
-export { scrapeFixtureData }
+export { getLinks }

@@ -6,6 +6,7 @@ import cors from 'cors'
 import { scrapeFixtureDataNew } from './fixtureNew.js'
 import { generateBlogFinal } from './blog.js'
 import dotenv from 'dotenv'
+import { getLinks } from './getLinksFromPage.js'
 const app = express()
 
 dotenv.config()
@@ -58,13 +59,17 @@ app.post('/fixture', async(req, res) => {
 app.post('/blog',async(req, res) => {
     try{
       const url =req.body.url
-      const output = await scrapeFixtureData(url)
-      const link = output.link;
-      const output1 = await scrapeFixtureDataNew(link)
-      const blog = await generateBlogFinal(output1)
+      const output = await getLinks(url)
+      const links = output.link;
+      const blogs = await Promise.all(links.map(async (link) => {
+        const output1 = await scrapeFixtureDataNew(link)
+        const blog = await generateBlogFinal(output1)
+        return blog;
+      }))
+      
 
       // const blog = generat
-      res.send({ status:'success',message:"Blog generated successfully",blog})
+      res.send({ status:'success',message:"Blog generated successfully",blogs})
     } catch(e){
         console.log(e)
         res.status(500).send({ status:'failure',message:"Something went wrong"})
