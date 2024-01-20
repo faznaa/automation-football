@@ -40,7 +40,7 @@ async function getSearchData(siteUrl) {
     
             // Navigate the page to a URL
             // await page.goto(`https://www.similarweb.com/website/${siteUrl}/#overview`);
-            await page.goto(siteUrl,{timeout: 60000, waitUntil: 'domcontentloaded'})
+            await page.goto(`${siteUrl}?sort=GOAL_COUNT:DESC`,{timeout: 60000, waitUntil: 'domcontentloaded'})
             
             // await page.goto(siteUrl)
             // await page.waitForSelector('.app-header__container .app-search__input');
