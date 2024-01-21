@@ -61,11 +61,12 @@ app.post('/blog',async(req, res) => {
       const url =req.body.url
       const output = await getLinks(url)
       const links = output.link;
-      const blogs = await Promise.all(links.map(async (link) => {
+      const blogs = await Promise.all(links.map(async (link, index) => {
         const output1 = await scrapeFixtureDataNew(link)
         const blog = await generateBlogFinal(output1)
         return blog;
       }))
+      
       
 
       // const blog = generat

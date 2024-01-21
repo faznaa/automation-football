@@ -208,13 +208,11 @@ async function filterData(data) {
         [head[10]]: input[head[10]][index],
         [head[11]]: input[head[11]][index],
       }));
-    console.log(output)
     return output
 }
 async function scrapeFixtureDataNew(url) {
     let filteredData = await processData(url);
     // const filteredData = await filterData(data)
-    console.log(filteredData)
     return filteredData[0]
 }
 

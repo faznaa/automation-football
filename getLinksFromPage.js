@@ -81,7 +81,6 @@ async function getSearchData(siteUrl) {
             return outputRow
         })();
     
-        console.log("OUTPUT",output)
         return output;
     }catch(err) {
         console.log("err1",err)

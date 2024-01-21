@@ -7,9 +7,7 @@ async function openAiFun(prompt) {
     messages: [{ role: "user", content: prompt }],
     model: "gpt-4",
   });
-  console.log(completion);
 
-  console.log(completion.choices[0]);
   return completion.choices[0]?.message?.content;
 }
 
@@ -156,6 +154,12 @@ const fixture = {
 };
 
 const generateBlog = async(data) => {
+  if(!data) return {
+    blog: "No data",
+    date: "No data",
+    place: "No data",
+    team:"No data",
+  }
   const teamsData = `
   ${data.scores[0].teamName}
   \t${data.scores[0].points?.join("\n\t")}
@@ -183,6 +187,7 @@ const generateBlog = async(data) => {
   const finalPrompt = prompt(teamsData);
 
   const result = await openAiFun(finalPrompt);
+  console.log("RESULT",result)
   return {
     blog: result,
     date: data.date,
