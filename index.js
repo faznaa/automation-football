@@ -61,19 +61,40 @@ app.post('/blog',async(req, res) => {
       const url =req.body.url
       const output = await getLinks(url)
       const links = output.link;
-      const blogs = await Promise.all(links.map(async (link, index) => {
-        return new Promise(async(resolve, reject) => {
-          const output1 = await scrapeFixtureDataNew(link)
-          const blog = await generateBlogFinal(output1)
-          resolve(blog)
-        })
+      // const blogs = await Promise.all(links.map(async (link, index) => {
+      //   return new Promise(async(resolve, reject) => {
+      //     const output1 = await scrapeFixtureDataNew(link)
+      //     const blog = await generateBlogFinal(output1)
+      //     resolve(blog)
+      //   })
+
         
-      }))
+      // }))
+      const blogs = []
+      for (const link of links) {
+        const output1 = await scrapeFixtureDataNew(link);
+        const blog = await generateBlogFinal(output1);
+        blogs.push(blog);
+      }
       
       
+      // const output1 = await scrapeFixtureDataNew(links[0])
+      // const blog = await generateBlogFinal(output1)
+      // const output2 = await scrapeFixtureDataNew(links[1])
+      // const blog1 = await generateBlogFinal(output2)
+
+      // Write an alternative to above code using map and Promise.all
+
+      // const blogs = await Promise.all(links.map(async (link, index) => {
+      //   const output1 = await scrapeFixtureDataNew(link)
+      //   const blog = await generateBlogFinal(output1)
+      //   return blog
+      // }))
 
       // const blog = generat
       res.send({ status:'success',message:"Blog generated successfully",blogs})
+
+      // res.send({ status:'success',message:"Blog generated successfully",blogs:[blog,blog1]})
     } catch(e){
         console.log(e)
         res.status(500).send({ status:'failure',message:"Something went wrong"})
