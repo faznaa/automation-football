@@ -61,35 +61,13 @@ app.post('/blog',async(req, res) => {
       const url =req.body.url
       const output = await getLinks(url)
       const links = output.link;
-      // const blogs = await Promise.all(links.map(async (link, index) => {
-      //   return new Promise(async(resolve, reject) => {
-      //     const output1 = await scrapeFixtureDataNew(link)
-      //     const blog = await generateBlogFinal(output1)
-      //     resolve(blog)
-      //   })
-
-        
-      // }))
+   
       const blogs = []
       for (const link of links) {
         const output1 = await scrapeFixtureDataNew(link);
         const blog = await generateBlogFinal(output1);
         blogs.push(blog);
       }
-      
-      
-      // const output1 = await scrapeFixtureDataNew(links[0])
-      // const blog = await generateBlogFinal(output1)
-      // const output2 = await scrapeFixtureDataNew(links[1])
-      // const blog1 = await generateBlogFinal(output2)
-
-      // Write an alternative to above code using map and Promise.all
-
-      // const blogs = await Promise.all(links.map(async (link, index) => {
-      //   const output1 = await scrapeFixtureDataNew(link)
-      //   const blog = await generateBlogFinal(output1)
-      //   return blog
-      // }))
 
       // const blog = generat
       res.send({ status:'success',message:"Blog generated successfully",blogs})
@@ -100,6 +78,31 @@ app.post('/blog',async(req, res) => {
         res.status(500).send({ status:'failure',message:"Something went wrong"})
     }
 })
+
+app.post('/links',async(req, res) => {
+  try{
+    const url =req.body.url
+    const output = await getLinks(url)
+    const links = output.link;
+    res.send({ status:'success',message:"Retrieved links successfully",data:links})
+  } catch(e){
+      console.log(e)
+      res.status(500).send({ status:'failure',message:"Something went wrong"})
+  }
+})
+
+app.post('/blog/single',async(req, res) => {
+  try{
+    const url =req.body.url
+    const output1 = await scrapeFixtureDataNew(url);
+    const blog = await generateBlogFinal(output1);
+    res.send({ status:'success',message:"Retrieved links successfully",data:blog})
+  } catch(e){
+      console.log(e)
+      res.status(500).send({ status:'failure',message:"Something went wrong"})
+  }
+})
+
 
 app.post('/statistics', async(req, res) => {
   try{
