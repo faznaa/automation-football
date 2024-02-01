@@ -95,8 +95,10 @@ app.post('/links',async(req, res) => {
 app.post('/blog/single',async(req, res) => {
   try{
     const url =req.body.url
+    const prompt =req.body.prompt
+    if(!prompt) return res.status(400).send({ status:'failure',message:"Prompt is required"})
     const output1 = await scrapeFixtureDataNew(url);
-    const blog = await generateBlogFinal(output1);
+    const blog = await generateBlogFinal(output1,prompt);
     res.send({ status:'success',message:"Retrieved links successfully",data:blog})
   } catch(e){
       console.log(e)
