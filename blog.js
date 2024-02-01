@@ -11,26 +11,12 @@ async function openAiFun(prompt) {
   return completion.choices[0]?.message?.content;
 }
 
-const prompt = (teamsData) => `
-${teamsData}
- Can you please write a 700 words summary of this match.
-
-Please include the names of the teams, the oval they played at, DO NOT mention the Adelaide football League or the starting time of the game. DO NOT have the result of the game at the top.
-
-When announcing the winner. Just tell us what the final margin was. Don’t give a match summary or descriptive words.
-
-Can you please put the scores for the first quarter, half time, third quarter and final score. The scores need to be written in such as style where it has the final total of each quarter in brackets.
-
-Can you also please put the best players in the summary.
-
-It’s a must the you list the goal scorers at the end of the summary and include their first name and surname. Can you please put the goal kickers summary in the same format as the best players
-
-Its a must that you also list the end of each quarter scores however this can be done line by line
-
-Please do not say if the player was in attack or defence or any position they played.
-
-DO NOT mention when the players kick the goals
+const prompt = (teamsData,userPrompt) => `
  
+${userPrompt}
+ 
+DATA : ${teamsData}
+
 `;
 const fixture = {
   status: "success",
@@ -153,7 +139,7 @@ const fixture = {
   },
 };
 
-const generateBlog = async(data) => {
+const generateBlog = async(data,userPrompt) => {
   if(!data) return {
     blog: "No data",
     date: "No data",
@@ -184,7 +170,7 @@ const generateBlog = async(data) => {
     \t${data.goalKeepers.team_2?.map((value) => `${value?.player} - ${value?.goal}`).join("\n\t")}
     
   `;
-  const finalPrompt = prompt(teamsData);
+  const finalPrompt = prompt(teamsData, userPrompt);
 
   const result = await openAiFun(finalPrompt);
   console.log("RESULT",result)
@@ -197,8 +183,8 @@ const generateBlog = async(data) => {
 
 };
 
-const generateBlogFinal = async(input) => {
-    const data = await generateBlog(input);
+const generateBlogFinal = async(input,userPrompt) => {
+    const data = await generateBlog(input,userPrompt);
     return data
 }
 export { generateBlogFinal}

@@ -59,13 +59,14 @@ app.post('/fixture', async(req, res) => {
 app.post('/blog',async(req, res) => {
     try{
       const url =req.body.url
+      const prompt =req.body.prompt
       const output = await getLinks(url)
       const links = output.link;
    
       const blogs = []
       for (const link of links) {
         const output1 = await scrapeFixtureDataNew(link);
-        const blog = await generateBlogFinal(output1);
+        const blog = await generateBlogFinal(output1,prompt);
         blogs.push(blog);
       }
 
