@@ -10,17 +10,17 @@ const noUrl = '#VALUE!';
 async function getSearchData(siteUrl) {
     console.log("FIXTURE")
     const browser = await puppeteer.launch({
-        // args:[
-        //     '--no-sandbox',
-        //     '--disable-setuid-sandbox',
-        //     "--single-process",
-        //     "--no-zygote"
-        // ],
-        // headless: true,
-        headless:false,
+        args:[
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            "--single-process",
+            "--no-zygote"
+        ],
+        headless: true,
+        // headless:false,
         // headless:process.env.NODE_ENV == 'production' ? true : false,
                 // REMOVE THIS BEFORE PRODUCTION
-        // executablePath: process.env.NODE_ENV == 'production' ? '/usr/bin/google-chrome-stable' : puppeteer.executablePath()
+        executablePath: process.env.NODE_ENV == 'production' ? '/usr/bin/google-chrome-stable' : puppeteer.executablePath()
     });
     try{
         let output = await (async () => {
