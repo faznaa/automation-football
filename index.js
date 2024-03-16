@@ -7,6 +7,7 @@ import { scrapeFixtureDataNew } from './fixtureNew.js'
 import { generateBlogFinal } from './blog.js'
 import dotenv from 'dotenv'
 import { getLinks } from './getLinksFromPage.js'
+import { scrapUpcomingCompetitionData } from './roundUpcoming.js'
 const app = express()
 
 dotenv.config()
@@ -48,6 +49,19 @@ app.post('/fixture', async(req, res) => {
 
       // const blog = generat
       res.send({ status:'success',message:"Data scraped successfully",data:output1})
+  }catch(e){
+      console.log(e)
+      res.status(500).send({ status:'failure',message:"Something went wrong"})
+  }
+})
+
+app.post('/upcoming', async(req, res) => {
+  try{
+      const url =req.body.url
+      const output = await scrapUpcomingCompetitionData(url)
+
+      // const blog = generat
+      res.send({ status:'success',message:"Data scraped successfully",data:output})
   }catch(e){
       console.log(e)
       res.status(500).send({ status:'failure',message:"Something went wrong"})
