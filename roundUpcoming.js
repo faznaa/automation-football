@@ -10,17 +10,17 @@ const noUrl = '#VALUE!';
 async function getSearchData(siteUrl) {
     console.log("FIXTURE")
     const browser = await puppeteer.launch({
-        args:[
-            '--no-sandbox',
-            '--disable-setuid-sandbox',
-            "--single-process",
-            "--no-zygote"
-        ],
-        headless: true,
-        // headless:false,
+        // args:[
+        //     '--no-sandbox',
+        //     '--disable-setuid-sandbox',
+        //     "--single-process",
+        //     "--no-zygote"
+        // ],
+        // headless: true,
+        headless:false,
         // headless:process.env.NODE_ENV == 'production' ? true : false,
                 // REMOVE THIS BEFORE PRODUCTION
-        executablePath: process.env.NODE_ENV == 'production' ? '/usr/bin/google-chrome-stable' : puppeteer.executablePath()
+        // executablePath: process.env.NODE_ENV == 'production' ? '/usr/bin/google-chrome-stable' : puppeteer.executablePath()
     });
     try{
         let output = await (async () => {
@@ -68,6 +68,7 @@ async function getSearchData(siteUrl) {
                     
                     // let myLink = document.querySelector('a.gdEmqr')
                     let teamsData = Array.from(document.querySelectorAll('.sc-10c3c88-7'))
+                    let round = document.querySelector('.sc-10c3c88-1').innerText
                     const scores = teamsData.map((row) => {
                         let _date = row.querySelector('.dpCSKv').innerText
                         // _date  ="07:40 PM, Thu, 28 Mar 24"
@@ -88,7 +89,10 @@ async function getSearchData(siteUrl) {
 
                     })
                     
-                    return scores
+                    return {
+                        teams:scores,
+                        round
+                    }
                     
                    }
                 );
